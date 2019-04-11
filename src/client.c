@@ -128,5 +128,7 @@ int main(int argc, char *argv[])
     printf("%s\n", buf);
   }
 
+  free(urlinfo);
+
   return 0;
 }
