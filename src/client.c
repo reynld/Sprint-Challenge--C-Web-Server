@@ -48,15 +48,19 @@ urlinfo_t *parse_url(char *url)
   // IMPLEMENT ME! //
   ///////////////////
 
-  path = strchr(url, "/");
+  path = strchr(url, '/');
   urlinfo->path = path + 1;
-  path = '\0';
+  *path = '\0';
+
 
   port = strstr(url, ":");
   urlinfo->port = port + 1;
-  port = '\0';
+  *port = '\0';
 
   urlinfo->hostname = url;
+  printf("path: %s\n", urlinfo->path);
+  printf("port: %s\n", urlinfo->port);
+  printf("url: %s\n", urlinfo->hostname);
 
   return urlinfo;
 }
@@ -84,7 +88,7 @@ int send_request(int fd, char *hostname, char *port, char *path)
   // Connection: close
 
   rv = sprintf(request,
-    "GET %s HTTP/1.1\n"
+    "GET /%s HTTP/1.1\n"
     "Host: %s:%s\n"
     "Connection: close\n",
     path, hostname, port
@@ -120,10 +124,9 @@ int main(int argc, char *argv[])
   send_request(sockfd, urlinfo->hostname, urlinfo->port, urlinfo->path);
 
   while ((numbytes = recv(sockfd, buf, BUFSIZE - 1, 0)) > 0) {
-  // print the data we got back to stdout
+    // print the data we got back to stdout
+    printf("%s\n", buf);
   }
-
-
 
   return 0;
 }
