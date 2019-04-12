@@ -54,22 +54,26 @@ urlinfo_t *parse_url(char *url)
   if (prepend != NULL) {
     hostname = prepend + 8;
   }
-
   prepend = strstr(hostname, "http://");
   if (prepend != NULL) {
     hostname = prepend + 7;
   }
 
-  printf("hostname: %s", prepend);
-
   path = strchr(hostname, '/');
-
-  urlinfo->path = path + 1;
-  *path = '\0';
+  if (path != NULL) {
+    urlinfo->path = path + 1;
+    *path = '\0';
+  } else {
+    urlinfo->path = "/";
+  }
 
   port = strstr(hostname, ":");
-  urlinfo->port = port + 1;
-  *port = '\0';
+  if (port != NULL) {
+    urlinfo->port = port + 1;
+    *port = '\0';
+  } else {
+    urlinfo->port = "80";
+  }
 
   urlinfo->hostname = hostname;
   return urlinfo;
