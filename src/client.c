@@ -48,16 +48,30 @@ urlinfo_t *parse_url(char *url)
   // IMPLEMENT ME! //
   ///////////////////
 
-  path = strchr(url, '/');
+  char *prepend;
+
+  prepend = strstr(hostname, "https://");
+  if (prepend != NULL) {
+    hostname = prepend + 8;
+  }
+
+  prepend = strstr(hostname, "http://");
+  if (prepend != NULL) {
+    hostname = prepend + 7;
+  }
+
+  printf("hostname: %s", prepend);
+
+  path = strchr(hostname, '/');
 
   urlinfo->path = path + 1;
   *path = '\0';
 
-  port = strstr(url, ":");
+  port = strstr(hostname, ":");
   urlinfo->port = port + 1;
   *port = '\0';
 
-  urlinfo->hostname = url;
+  urlinfo->hostname = hostname;
   return urlinfo;
 }
 
